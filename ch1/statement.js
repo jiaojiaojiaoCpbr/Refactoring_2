@@ -21,6 +21,8 @@ function statement(invoice, plays) {
     return result;
   };
 
+  const playFor = (performance) => plays[performance.playID];
+
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
@@ -32,7 +34,7 @@ function statement(invoice, plays) {
 
   for (let i = 0; i < invoice.performances.length; i += 1) {
     const perf = invoice.performances[i];
-    const play = plays[perf.playID];
+    const play = playFor(perf);
     const thisAmount = amountFor(perf, play);
 
     // add volume credits
