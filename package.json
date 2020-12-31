@@ -90,23 +90,5 @@
     "webpack-cli": "^3.3.12",
     "webpack-merge": "^4.2.1"
   },
-  "dependencies": {},
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged --concurrent false"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx}": "prettier --write",
-    "*.{js,jsx,es5}": "npm run eslint5",
-    "*.{js,jsx,es6}": "npm run eslint6"
-  },
-  "auto-changelog": {
-    "template": "release/changelog.hbs",
-    "output": "CHANGELOG.md",
-    "unreleased": true,
-    "tagPattern": "^\\d+.\\d+.\\d.*",
-    "handlebarsSetup": "release/changelog-setup.js",
-    "startingVersion": "1.0.0-2020.08.25-prod2"
-  }
+  "dependencies": {}
 }
