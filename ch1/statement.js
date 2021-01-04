@@ -7,27 +7,6 @@ const renderPlainText = (data) => {
     }).format(aNumber);
   };
 
-  const totalAmount = () => {
-    let result = 0;
-
-    for (let i = 0; i < data.performances.length; i += 1) {
-      const perf = data.performances[i];
-      result += perf.amount;
-    }
-    return result;
-  };
-
-  const totalVolumeCredits = () => {
-    let result = 0;
-    for (let i = 0; i < data.performances.length; i += 1) {
-      const perf = data.performances[i];
-
-      result += perf.volumeCredits;
-    }
-
-    return result;
-  };
-
   let result = `Statement for ${data.customer}\n`;
   for (let i = 0; i < data.performances.length; i += 1) {
     const perf = data.performances[i];
@@ -36,8 +15,8 @@ const renderPlainText = (data) => {
     } seats)\n`;
   }
 
-  result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
-  result += `You earned ${totalVolumeCredits()} credits\n`;
+  result += `Amount owed is ${usd(data.totalAmount / 100)}\n`;
+  result += `You earned ${data.totalVolumeCredits} credits\n`;
   return result;
 };
 
