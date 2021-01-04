@@ -8,12 +8,14 @@ const renderPlainText = (data) => {
   };
 
   let result = `Statement for ${data.customer}\n`;
-  for (let i = 0; i < data.performances.length; i += 1) {
-    const perf = data.performances[i];
-    result += `  ${perf.play.name}: ${usd(perf.amount / 100)} (${
-      perf.audience
-    } seats)\n`;
-  }
+
+  result = data.performances.reduce(
+    (accumulator, perf) =>
+      `${accumulator}  ${perf.play.name}: ${usd(perf.amount / 100)} (${
+        perf.audience
+      } seats)\n`,
+    result
+  );
 
   result += `Amount owed is ${usd(data.totalAmount / 100)}\n`;
   result += `You earned ${data.totalVolumeCredits} credits\n`;
