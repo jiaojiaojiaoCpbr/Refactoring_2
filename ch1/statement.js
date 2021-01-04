@@ -86,9 +86,32 @@ const statement = (invoice, plays) => {
     return result;
   };
 
+  const totalAmount = (data) => {
+    let result = 0;
+
+    for (let i = 0; i < data.performances.length; i += 1) {
+      const perf = data.performances[i];
+      result += perf.amount;
+    }
+    return result;
+  };
+
+  const totalVolumeCredits = (data) => {
+    let result = 0;
+    for (let i = 0; i < data.performances.length; i += 1) {
+      const perf = data.performances[i];
+
+      result += perf.volumeCredits;
+    }
+
+    return result;
+  };
+
   const statementData = {};
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   return renderPlainText(statementData, plays);
 };
 
