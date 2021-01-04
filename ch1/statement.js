@@ -41,7 +41,7 @@ const renderPlainText = (data) => {
   return result;
 };
 
-const statement = (invoice, plays) => {
+const createStatementData = (invoice, plays) => {
   const playFor = (performance) => plays[performance.playID];
 
   const amountFor = (performance) => {
@@ -112,7 +112,11 @@ const statement = (invoice, plays) => {
   statementData.performances = invoice.performances.map(enrichPerformance);
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-  return renderPlainText(statementData, plays);
+  return statementData;
+};
+
+const statement = (invoice, plays) => {
+  return renderPlainText(createStatementData(invoice, plays));
 };
 
 module.exports = {
