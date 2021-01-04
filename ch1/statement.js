@@ -1,11 +1,11 @@
-const renderPlainText = (data, plays) => {
-  const volumeCreditsFor = (perf) => {
+const renderPlainText = (data) => {
+  const volumeCreditsFor = (performance) => {
     let result = 0;
     // add volume credits
-    result += Math.max(perf.audience - 30, 0);
+    result += Math.max(performance.audience - 30, 0);
     // add extra credit for every ten comedy attendees
-    if (perf.play.type === 'comedy') {
-      result += Math.floor(perf.audience / 5);
+    if (performance.play.type === 'comedy') {
+      result += Math.floor(performance.audience / 5);
     }
 
     return result;
