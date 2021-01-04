@@ -72,14 +72,7 @@ const createStatementData = (invoice, plays) => {
   };
 
   const totalVolumeCredits = (data) => {
-    let result = 0;
-    for (let i = 0; i < data.performances.length; i += 1) {
-      const perf = data.performances[i];
-
-      result += perf.volumeCredits;
-    }
-
-    return result;
+    return data.performances.reduce((acc, perf) => acc + perf.volumeCredits, 0);
   };
 
   const statementData = {};
