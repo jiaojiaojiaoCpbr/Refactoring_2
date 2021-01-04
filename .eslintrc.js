@@ -54,6 +54,7 @@ module.exports = {
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     radix: ['error', 'as-needed'],
+    'max-classes-per-file': ['warn', 1]
     'max-len': [
       1,
       120,
