@@ -78,10 +78,23 @@ const statement = (invoice, plays) => {
     return result;
   };
 
+  const volumeCreditsFor = (performance) => {
+    let result = 0;
+    // add volume credits
+    result += Math.max(performance.audience - 30, 0);
+    // add extra credit for every ten comedy attendees
+    if (performance.play.type === 'comedy') {
+      result += Math.floor(performance.audience / 5);
+    }
+
+    return result;
+  };
+
   const enrichPerformance = (performance) => {
     const result = { ...performance };
     result.play = playFor(result);
     result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
     return result;
   };
 
