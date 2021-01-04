@@ -1,16 +1,4 @@
 const renderPlainText = (data) => {
-  const volumeCreditsFor = (performance) => {
-    let result = 0;
-    // add volume credits
-    result += Math.max(performance.audience - 30, 0);
-    // add extra credit for every ten comedy attendees
-    if (performance.play.type === 'comedy') {
-      result += Math.floor(performance.audience / 5);
-    }
-
-    return result;
-  };
-
   const usd = (aNumber) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -34,7 +22,7 @@ const renderPlainText = (data) => {
     for (let i = 0; i < data.performances.length; i += 1) {
       const perf = data.performances[i];
 
-      result += volumeCreditsFor(perf);
+      result += perf.volumeCredits;
     }
 
     return result;
