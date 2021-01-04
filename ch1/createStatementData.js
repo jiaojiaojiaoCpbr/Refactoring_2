@@ -3,32 +3,32 @@ class PerformanceCalculator {
     this.performance = performance;
     this.play = play;
   }
-}
 
-const createStatementData = (invoice, plays) => {
-  const playFor = (performance) => plays[performance.playID];
-
-  const amountFor = (performance) => {
+  get amount() {
     let result = 0;
-    switch (performance.play.type) {
+    switch (this.play.type) {
       case 'tragedy':
         result = 40000;
-        if (performance.audience > 30) {
-          result += 1000 * (performance.audience - 30);
+        if (this.performance.audience > 30) {
+          result += 1000 * (this.performance.audience - 30);
         }
         break;
       case 'comedy':
         result = 30000;
-        if (performance.audience > 20) {
-          result += 10000 + 500 * (performance.audience - 20);
+        if (this.performance.audience > 20) {
+          result += 10000 + 500 * (this.performance.audience - 20);
         }
-        result += 300 * performance.audience;
+        result += 300 * this.performance.audience;
         break;
       default:
-        throw new Error(`unknown type: ${performance.play.type}`);
+        throw new Error(`unknown type: ${this.play.type}`);
     }
     return result;
-  };
+  }
+}
+
+const createStatementData = (invoice, plays) => {
+  const playFor = (performance) => plays[performance.playID];
 
   const volumeCreditsFor = (performance) => {
     let result = 0;
@@ -49,7 +49,7 @@ const createStatementData = (invoice, plays) => {
     );
     const result = { ...performance };
     result.play = calculator.play;
-    result.amount = amountFor(result);
+    result.amount = calculator.amount;
     result.volumeCredits = volumeCreditsFor(result);
     return result;
   };
