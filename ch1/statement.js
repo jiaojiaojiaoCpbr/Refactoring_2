@@ -1,9 +1,7 @@
-function statement(invoice, plays) {
-  const playFor = (performance) => plays[performance.playID];
-
+const renderPlainText = (data, plays) => {
   const amountFor = (performance) => {
     let result = 0;
-    switch (playFor(performance).type) {
+    switch (performance.play.type) {
       case 'tragedy':
         result = 40000;
         if (performance.audience > 30) {
@@ -18,7 +16,7 @@ function statement(invoice, plays) {
         result += 300 * performance.audience;
         break;
       default:
-        throw new Error(`unknown type: ${playFor(performance).type}`);
+        throw new Error(`unknown type: ${performance.play.type}`);
     }
     return result;
   };
@@ -28,7 +26,7 @@ function statement(invoice, plays) {
     // add volume credits
     result += Math.max(perf.audience - 30, 0);
     // add extra credit for every ten comedy attendees
-    if (playFor(perf).type === 'comedy') {
+    if (perf.play.type === 'comedy') {
       result += Math.floor(perf.audience / 5);
     }
 
@@ -43,25 +41,54 @@ function statement(invoice, plays) {
     }).format(aNumber);
   };
 
-  let totalAmount = 0;
-  let volumeCredits = 0;
-  let result = `Statement for ${invoice.customer}\n`;
+  const totalAmount = () => {
+    let result = 0;
 
-  for (let i = 0; i < invoice.performances.length; i += 1) {
-    const perf = invoice.performances[i];
+    for (let i = 0; i < data.performances.length; i += 1) {
+      const perf = data.performances[i];
+      result += amountFor(perf);
+    }
+    return result;
+  };
 
-    volumeCredits += volumeCreditsFor(perf);
+  const totalVolumeCredits = () => {
+    let result = 0;
+    for (let i = 0; i < data.performances.length; i += 1) {
+      const perf = data.performances[i];
 
-    // print line for this order
-    result += `  ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
+      result += volumeCreditsFor(perf);
+    }
+
+    return result;
+  };
+
+  let result = `Statement for ${data.customer}\n`;
+  for (let i = 0; i < data.performances.length; i += 1) {
+    const perf = data.performances[i];
+    result += `  ${perf.play.name}: ${usd(amountFor(perf) / 100)} (${
       perf.audience
     } seats)\n`;
-    totalAmount += amountFor(perf);
   }
-  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
-  result += `You earned ${volumeCredits} credits\n`;
+
+  result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
+  result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
-}
+};
+
+const statement = (invoice, plays) => {
+  const playFor = (performance) => plays[performance.playID];
+
+  const enrichPerformance = (performance) => {
+    const result = { ...performance };
+    result.play = playFor(result);
+    return result;
+  };
+
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances.map(enrichPerformance);
+  return renderPlainText(statementData, plays);
+};
 
 module.exports = {
   statement,
