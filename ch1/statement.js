@@ -1,26 +1,4 @@
 const renderPlainText = (data, plays) => {
-  const amountFor = (performance) => {
-    let result = 0;
-    switch (performance.play.type) {
-      case 'tragedy':
-        result = 40000;
-        if (performance.audience > 30) {
-          result += 1000 * (performance.audience - 30);
-        }
-        break;
-      case 'comedy':
-        result = 30000;
-        if (performance.audience > 20) {
-          result += 10000 + 500 * (performance.audience - 20);
-        }
-        result += 300 * performance.audience;
-        break;
-      default:
-        throw new Error(`unknown type: ${performance.play.type}`);
-    }
-    return result;
-  };
-
   const volumeCreditsFor = (perf) => {
     let result = 0;
     // add volume credits
@@ -46,7 +24,7 @@ const renderPlainText = (data, plays) => {
 
     for (let i = 0; i < data.performances.length; i += 1) {
       const perf = data.performances[i];
-      result += amountFor(perf);
+      result += perf.amount;
     }
     return result;
   };
@@ -65,7 +43,7 @@ const renderPlainText = (data, plays) => {
   let result = `Statement for ${data.customer}\n`;
   for (let i = 0; i < data.performances.length; i += 1) {
     const perf = data.performances[i];
-    result += `  ${perf.play.name}: ${usd(amountFor(perf) / 100)} (${
+    result += `  ${perf.play.name}: ${usd(perf.amount / 100)} (${
       perf.audience
     } seats)\n`;
   }
